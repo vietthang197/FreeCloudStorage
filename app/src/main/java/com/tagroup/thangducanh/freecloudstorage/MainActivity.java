@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // code activity result
     private static final int FILE_SELECT_CODE = 11;
-    private static final int READ_EXTERNAL_REQUEST = 12;
+    private static final int WRITE_EXTERNAL_REQUEST = 12;
 
     // code item view
     private Button btnUploadFile, btnChooseFile;
@@ -50,11 +50,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void requirePermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int result = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+            int result = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
             if (PackageManager.PERMISSION_GRANTED != result) {
                 ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                        READ_EXTERNAL_REQUEST);
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        WRITE_EXTERNAL_REQUEST);
             }
         }
     }
@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case READ_EXTERNAL_REQUEST: {
+            case WRITE_EXTERNAL_REQUEST: {
                 if (grantResults.length <= 0
                         || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(MainActivity.this, "Bạn phải cấp quyền cho ứng dụng", Toast.LENGTH_SHORT).show();
