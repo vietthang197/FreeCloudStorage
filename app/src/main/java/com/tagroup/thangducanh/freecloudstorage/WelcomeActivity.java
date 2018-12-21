@@ -2,6 +2,7 @@ package com.tagroup.thangducanh.freecloudstorage;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -47,15 +48,25 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        final FirebaseUser currentUser = mAuth.getCurrentUser();
         if (null == currentUser) {
-            Intent intentLogin = new Intent(WelcomeActivity.this, LoginActivity.class);
-            startActivity(intentLogin);
-            finish();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intentLogin = new Intent(WelcomeActivity.this, LoginActivity.class);
+                    startActivity(intentLogin);
+                    finish();
+                }
+            }, 2000);
         } else {
-            Intent intentMain = new Intent(WelcomeActivity.this, MainActivity.class);
-            intentMain.putExtra("currentUser", currentUser);
-            startActivity(intentMain);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intentMain = new Intent(WelcomeActivity.this, MainActivity.class);
+                    intentMain.putExtra("currentUser", currentUser);
+                    startActivity(intentMain);
+                }
+            }, 1000);
         }
     }
 }

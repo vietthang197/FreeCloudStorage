@@ -9,13 +9,23 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
+import com.tagroup.thangducanh.freecloudstorage.utils.CircleImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,16 +45,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // code data type
     private List<Uri> uriList;
 
+    private CircleImageView imgIconUser;
 
+    private TextView tvEmailUser;
+
+    private FirebaseAuth mAuth;
+
+    private FirebaseUser firebaseUser;
+
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initData();
         initView();
         initEvents();
-        initData();
         requirePermission();
     }
 
@@ -68,10 +86,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fabUploadFile.setOnClickListener(this);
     }
 
+
     private void initView() {
         btnUploadFile = findViewById(R.id.btn_upload_file);
         btnChooseFile = findViewById(R.id.btn_choose_file);
         fabUploadFile = findViewById(R.id.btn_bottom_sheet_dialog);
+        navigationView = findViewById(R.id.nav_main);
+        View headerNav = navigationView.inflateHeaderView(R.layout.nav_main_layout);
+        imgIconUser = headerNav.findViewById(R.id.iv_icon_user);
+        tvEmailUser = headerNav.findViewById(R.id.tv_email_user);
     }
 
     @Override
@@ -109,6 +132,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(MainActivity.this, "Yêu cầu cài đặt File Manager",
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mAuth = FirebaseAuth.getInstance();
+        firebaseUser = mAuth.getCurrentUser();
+        Picasso.get().load(firebaseUser.getPhotoUrl()).into(imgIconUser);
+        tvEmailUser.setText(firebaseUser.getEmail());
     }
 
     @Override
